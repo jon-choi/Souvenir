@@ -1,2 +1,2 @@
 ## Netlify Link:
-[app](https://souvenir-memory-app.netlify.app/)
+[Souvenirs](https://souvenir-memory-app.netlify.app/)

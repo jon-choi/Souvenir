@@ -7,14 +7,13 @@ import {
 } from "../constants/actionTypes";
 import * as api from "../api/index.js";
 
-// ACTION CREATORS
 export const getPosts = () => async (dispatch) => {
   try {
     const { data } = await api.fetchPosts();
 
     dispatch({ type: FETCH_ALL, payload: data });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -38,21 +37,23 @@ export const updatePost = (id, post) => async (dispatch) => {
   }
 };
 
-export const deletePost = (id) => async (dispatch) => {
-  try {
-    await api.deletePost(id);
+export const likePost = (id) => async (dispatch) => {
+  const user = JSON.parse(localStorage.getItem("profile"));
 
-    dispatch({ type: DELETE, payload: id });
+  try {
+    const { data } = await api.likePost(id, user?.token);
+
+    dispatch({ type: LIKE, payload: data });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const likePost = (id) => async (dispatch) => {
+export const deletePost = (id) => async (dispatch) => {
   try {
-    const { data } = await api.likePost(id);
+    await api.deletePost(id);
 
-    dispatch({ type: LIKE, payload: data });
+    dispatch({ type: DELETE, payload: id });
   } catch (error) {
     console.log(error);
   }

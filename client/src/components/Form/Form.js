@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
-import FileBase from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
+import FileBase from "react-file-base64";
+
 import { createPost, updatePost } from "../../actions/posts";
 import useStyles from "./styles";
 
-// GET THE CURRENT ID
-
 const Form = ({ currentId, setCurrentId }) => {
-  const classes = useStyles();
-  const post = useSelector((state) =>
-    currentId ? state.posts.find((p) => p._id === currentId) : null
-  );
   const [postData, setPostData] = useState({
     title: "",
     message: "",
     tags: "",
     selectedFile: "",
   });
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((message) => message._id === currentId) : null
+  );
   const dispatch = useDispatch();
+  const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("profile"));
 
   useEffect(() => {
@@ -26,13 +25,8 @@ const Form = ({ currentId, setCurrentId }) => {
   }, [post]);
 
   const clear = () => {
-    setCurrentId(null);
-    setPostData({
-      title: "",
-      message: "",
-      tags: "",
-      selectedFile: "",
-    });
+    setCurrentId(0);
+    setPostData({ title: "", message: "", tags: "", selectedFile: "" });
   };
 
   const handleSubmit = async (e) => {
@@ -53,8 +47,7 @@ const Form = ({ currentId, setCurrentId }) => {
     return (
       <Paper className={classes.paper}>
         <Typography variant="h6" align="center">
-          Please sign in to make your own souvenirs and like everyone else's
-          souvenirs.
+          Please sign in to make your own memories.
         </Typography>
       </Paper>
     );
@@ -69,7 +62,7 @@ const Form = ({ currentId, setCurrentId }) => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">
-          {currentId ? "Edit" : "Make"} a Memory
+          {currentId ? `Edit "${post.title}"` : "Make a Memory"}
         </Typography>
         <TextField
           name="title"
@@ -84,6 +77,8 @@ const Form = ({ currentId, setCurrentId }) => {
           variant="outlined"
           label="Message"
           fullWidth
+          multiline
+          rows={4}
           value={postData.message}
           onChange={(e) =>
             setPostData({ ...postData, message: e.target.value })
@@ -92,7 +87,7 @@ const Form = ({ currentId, setCurrentId }) => {
         <TextField
           name="tags"
           variant="outlined"
-          label="Tags"
+          label="Tags (coma separated)"
           fullWidth
           value={postData.tags}
           onChange={(e) =>
@@ -131,4 +126,5 @@ const Form = ({ currentId, setCurrentId }) => {
     </Paper>
   );
 };
+
 export default Form;

@@ -5,7 +5,7 @@ import {
   DELETE,
   LIKE,
 } from "../constants/actionTypes";
-import * as api from "../api";
+import * as api from "../api/index.js";
 
 // ACTION CREATORS
 export const getPosts = () => async (dispatch) => {

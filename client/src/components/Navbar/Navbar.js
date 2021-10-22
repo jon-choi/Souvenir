@@ -4,6 +4,7 @@ import { AppBar, Typography, Toolbar, Button, Avatar } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import useStyles from "./styles";
 import memories from "../../images/memories.png";
+import decode from "jwt-decode";
 
 const Navbar = () => {
   const classes = useStyles();
@@ -15,7 +16,7 @@ const Navbar = () => {
   const logout = () => {
     dispatch({ type: "LOGOUT" });
 
-    history.push("/");
+    history.push("/auth");
 
     setUser(null);
   };
@@ -23,7 +24,11 @@ const Navbar = () => {
   useEffect(() => {
     const token = user?.token;
 
-    // JWT
+    if (token) {
+      const decodedToken = decode(token);
+
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+    }
 
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
